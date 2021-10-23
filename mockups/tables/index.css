@@ -4,7 +4,7 @@
 
 :root {
     --time-label-width: 9ch;
-    --day-label-width: 3ch;
+    --day-label-width: 2.5ch;
 }
   
 
@@ -25,7 +25,7 @@
     /* minimum total height of the calendar */
     min-height: 400px; 
     position: relative;
-    margin: 64px 24px 24px 72px;
+    /* margin: 64px 24px 24px 72px; */
     flex: 1 1;
     height: 400px;
     border: 2px solid hsla(0,0%,50.2%,.2);
@@ -77,10 +77,11 @@
     /* background-color: hsla(0,0%,50.2%,.2); */
 }
 
-/* .label {
+.label {
     font-weight: bold;
-    
-} */
+    padding: 2px 2px 0px 2px;
+    /* padding: 2px; */
+}
 
 .day .label {
     height: var(--day-label-width);
@@ -90,7 +91,10 @@
     display: flex;
     /* display: block; */
     align-items: flex-end;
-    /* justify-content: center; */
+    /* justify-content: left; */
+    justify-content: center;
+    padding-left: 3px;
+    padding-right: 3px;
     /* padding-bottom: 8px; */
 }
 
