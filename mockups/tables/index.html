@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="description">
+    <meta name="keywords" content="keywords">
+    <meta name="author" content="author">
+    <link rel=stylesheet href="./index.css" type="text/css">
+    <title>title</title>
+</head>
+
+<body>
+    <!-- Populate these at runtime -->
+    <div id="calendar-container">
+        <!-- border right and bottom -->
+        <div id="calendar">
+            <!-- Use ::after to have lines on top of row -->
+            <!-- Times are rows -->
+            <div id="times">
+                <!-- Number of these should change depending on zoom/time resolution -->
+                <!-- I've just put a few times manually until we make the script do it -->
+                <span class="time">
+                    <span class="label">7:30am</span>
+                </span>
+                <span class="time">
+                    <span class="label">8:00am</span>
+                </span>
+                <span class="time">
+                    <span class="label">8:30am</span>
+                </span>
+                <span class="time">
+                    <span class="label">9:00am</span>
+                </span>
+                <span class="time">
+                    <span class="label">9:30am</span>
+                </span>
+                <span class="time">
+                    <span class="label">10:00am</span>
+                </span>
+                <span class="time">
+                    <span class="label">10:30am</span>
+                </span>
+                <span class="time">
+                    <span class="label">11:00am</span>
+                </span>
+                <span class="time">
+                    <span class="label">11:30am</span>
+                </span>
+            </div>
+            <!-- Use ::after to have lines on left of col  -->
+            <!-- Days are columns -->
+            <div id="days">
+                <!-- Should only have 7 days -->
+                <div class="day">
+                    <span class="label">Monday</span>
+                </div>
+                <div class="day">
+                    <span class="label">Tuesday</span>
+                </div>
+                <div class="day">
+                    <span class="label">Wednesday</span>
+                </div>
+                <div class="day">
+                    <span class="label">Thursday</span>
+                </div>
+                <div class="day">
+                    <span class="label">Friday</span>
+                </div>
+                <div class="day">
+                    <span class="label">Saturday</span>
+                </div>
+                <div class="day">
+                    <span class="label">Sunday</span>
+                </div>
+            </div>
+            <!-- position to stack directly on top of bg -->
+            <div id="entries">
+
+            </div>
+        </div>
+        
+        
+    </div>
+    
+    <!--Generally, it is best practice to place the script at the end of the body so the page is fully loaded and rendered before it loads and parses the JS-->
+    <script src="./index.js"></script>
+</body>
+
+</html>

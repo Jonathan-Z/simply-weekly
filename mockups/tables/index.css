@@ -1,0 +1,103 @@
+* {
+    box-sizing: border-box;
+}
+
+#calendar-container {
+    display: flex;
+    flex: 1 1;
+    flex-direction: column;
+    /* make the inner content fill the entirety of its parent where possible */
+    align-items: stretch;
+    overflow-y: auto;
+}
+
+#calendar {
+    display: flex;
+    align-items: stretch;
+    flex-direction: row;
+    /* minimum total height of the calendar */
+    min-height: 400px; 
+    position: relative;
+    margin: 64px 24px 24px 72px;
+    flex: 1 1;
+    height: 400px;
+    /* border-bottom: 1px solid hsla(0,0%,50.2%,.2); */
+    /* border-right: 1px solid hsla(0,0%,50.2%,.2); */
+}
+
+#times {
+    display: flex;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: -48px;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    
+}
+
+.time {
+    position: relative;
+    flex: 1 1;
+    /* margin-top: -.5em; */
+}
+
+#days {
+    flex-direction: row;
+    display: flex;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: -40px;
+    bottom: 0;
+    display: flex;
+}
+
+.day {
+    position: relative;
+    flex: 1 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.day::after {
+    /* content: "";
+    position: absolute;
+    top: 40px;
+    bottom: 0;
+    width: 1px;
+    background-color: hsla(0,0%,50.2%,.2); */
+}
+
+.day .label {
+    height: 40px;
+    /* font-size: 1em; */
+    /* font-weight: 700; */
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding-bottom: 8px;
+}
+
+.time .label {
+    display: block;
+    width: 48px;
+    padding-right: 8px;
+    font-size: .8em;
+    font-weight: 700;
+    text-align: right;
+}
+
+.time::after {
+    /* content: "";
+    position: absolute;
+    left: 48px;
+    right: 0px;
+    top: .5em;
+    height: 1px;
+    background-color: hsla(0,0%,50.2%,.2); */
+}
+
+
+
