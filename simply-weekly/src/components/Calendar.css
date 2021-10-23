@@ -1,6 +1,7 @@
 @import url("https://cdn.jsdelivr.net/npm/@xz/fonts@1/serve/cascadia-code.min.css");
 * {
     box-sizing: border-box;
+    
     /* font-family: 'Cascadia Code', sans-serif; */
 }
 
@@ -14,6 +15,10 @@
     --day-label-width: 2.5ch;
 }
   
+  @keyframes fadeIn {
+    0% {opacity:0;}
+    100% {opacity:1;}
+  }
 
 #calendar-container {
     display: flex;
@@ -86,6 +91,11 @@
 .label {
     font-weight: bold;
     padding: 2px 2px 0px 2px;
+    animation: fadeIn 7s;
+    -webkit-animation: fadeIn 7s;
+    -moz-animation: fadeIn 7s;
+    -o-animation: fadeIn 7s;
+    -ms-animation: fadeIn 7s;
     /* padding: 2px; */
 }
 
