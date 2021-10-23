@@ -2,7 +2,14 @@
     box-sizing: border-box;
 }
 
+:root {
+    --time-label-width: 9ch;
+    --day-label-width: 3ch;
+}
+  
+
 #calendar-container {
+    font-family: "Calibri";
     display: flex;
     flex: 1 1;
     flex-direction: column;
@@ -29,7 +36,7 @@
 #times {
     display: flex;
     position: absolute;
-    top: 40px;
+    top: var(--day-label-width);
     bottom: 0;
     left: 0px;
     right: 0;
@@ -47,7 +54,7 @@
     flex-direction: row;
     display: flex;
     position: absolute;
-    left: 48px;
+    left: var(--time-label-width);
     right: 0;
     top: 0px;
     bottom: 0px;
@@ -70,23 +77,30 @@
     /* background-color: hsla(0,0%,50.2%,.2); */
 }
 
+/* .label {
+    font-weight: bold;
+    
+} */
+
 .day .label {
-    height: 40px;
+    height: var(--day-label-width);
+    /* text-align: left; */
     /* font-size: 1em; */
     /* font-weight: 700; */
     display: flex;
+    /* display: block; */
     align-items: flex-end;
-    justify-content: center;
-    padding-bottom: 8px;
+    /* justify-content: center; */
+    /* padding-bottom: 8px; */
 }
 
 .time .label {
     display: block;
-    width: 48px;
-    padding-right: 8px;
-    font-size: .8em;
-    font-weight: 700;
-    text-align: right;
+    width: var(--time-label-width);
+    /* padding-right: 8px; */
+    /* font-size: .8em; */
+    /* font-weight: 700; */
+    /* text-align: right; */
 }
 
 .time::before {
