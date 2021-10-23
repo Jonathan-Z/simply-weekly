@@ -148,3 +148,89 @@
     /* background-color: hsla(0,0%,50.2%,.2); */
     border: 1px solid hsla(0,0%,50.2%,.2)
 }
+
+/* .event {
+    position: relative;
+    flex: 1 1;
+    display: flex;
+    flex-direction: column;
+    background: green;
+} */
+
+
+.event {
+    /* flex: 1 1; */
+    /* padding: 5px; */
+
+    font-weight: bold;
+    font-size: 80%;
+  }
+  
+  .calendar1 {
+    background-color: #9ec8dd;
+    border-color: #81cdf2;
+  }
+  
+  .calendar2 {
+    background-color: #9b9eb0;
+  border-color: #bcc3e5;
+  }
+  
+  .text-box {
+      margin-top: 450px;
+      align-items:center;
+      margin-left: 40%;
+  }
+
+  input[type=text] {
+    height: 75px;
+    word-wrap: break-word;
+    word-break: break-all;
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+  }
+
+  button {
+      width: 100%;
+      padding: 12px 20px;
+  }
+
+  button:focus {
+      background: #6abed8;
+  }
+
+  .eight-am {
+      /* margin-top: 30%; */
+      margin-top: 40px;
+  }
+
+  .eight-thirty-am {
+      /* margin-top: 60%; */
+      margin-top: 80px;
+  }
+
+  .nine-am {
+      margin-top: 120px;
+  }
+
+  .nine-thirty-am {
+      margin-top: 160px;
+  }
+
+  .ten-am {
+      margin-top: 200px;
+  }
+
+  .ten-thirty-am {
+      margin-top: 240px;
+  }
+
+  .eleven-am {
+      margin-top: 280px;
+  }
+
+  .eleven-thirty-am {
+      margin-top: 320px;
+  }
