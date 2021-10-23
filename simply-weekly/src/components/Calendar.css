@@ -1,0 +1,116 @@
+@import url("https://cdn.jsdelivr.net/npm/@xz/fonts@1/serve/cascadia-code.min.css");
+* {
+    box-sizing: border-box;
+    font-family: 'Cascadia Code', sans-serif;
+}
+
+:root {
+    --time-label-width: 9ch;
+    --day-label-width: 3ch;
+}
+
+#calendar-container {
+    font-family: "Calibri";
+    display: flex;
+    flex: 1 1;
+    flex-direction: column;
+    /* make the inner content fill the entirety of its parent where possible */
+    align-items: stretch;
+    overflow-y: auto;
+}
+
+#calendar {
+    display: flex;
+    align-items: stretch;
+    flex-direction: row;
+    /* minimum total height of the calendar */
+    min-height: 400px; 
+    position: relative;
+    margin: 64px 24px 24px 72px;
+    flex: 1 1;
+    height: 400px;
+    border: 2px solid hsla(0,0%,50.2%,.2);
+    /* border-bottom: 2px solid hsla(0,0%,50.2%,.2); */
+    /* border-right: 2px solid hsla(0,0%,50.2%,.2); */
+}
+
+#times {
+    display: flex;
+    position: absolute;
+    top: var(--day-label-width);
+    bottom: 0;
+    left: 0px;
+    right: 0;
+    flex-direction: column;
+    
+}
+
+.time {
+    position: relative;
+    flex: 1 1;
+    /* margin-top: -.5em; */
+}
+
+#days {
+    flex-direction: row;
+    display: flex;
+    position: absolute;
+    left: var(--time-label-width);
+    right: 0;
+    top: 0px;
+    bottom: 0px;
+}
+
+.day {
+    position: relative;
+    flex: 1 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.day::after {
+    content: "";
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    border: 1px solid hsla(0,0%,50.2%,.2)
+    /* width: 1px; */
+    /* background-color: hsla(0,0%,50.2%,.2); */
+}
+
+/* .label {
+    font-weight: bold;
+    
+} */
+
+.day .label {
+    margin-left: 20%;
+    height: var(--day-label-width);
+    /* text-align: left; */
+    /* font-size: 1em; */
+    /* font-weight: 700; */
+    display: flex;
+    /* display: block; */
+    align-items: flex-end;
+    /* justify-content: center; */
+    /* padding-bottom: 8px; */
+}
+
+.time .label {
+    display: block;
+    width: var(--time-label-width);
+    /* padding-right: 8px; */
+    /* font-size: .8em; */
+    /* font-weight: 700; */
+    /* text-align: right; */
+}
+
+.time::before {
+    content: "";
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    /* height: 1px; */
+    /* background-color: hsla(0,0%,50.2%,.2); */
+    border: 1px solid hsla(0,0%,50.2%,.2)
+}
