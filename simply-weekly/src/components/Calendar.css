@@ -1,9 +1,10 @@
 @import url("https://cdn.jsdelivr.net/npm/@xz/fonts@1/serve/cascadia-code.min.css");
 * {
     box-sizing: border-box;
-    
     /* font-family: 'Cascadia Code', sans-serif; */
 }
+
+
 
 :root {
     --time-label-width: 9ch;
@@ -27,6 +28,7 @@
     /* make the inner content fill the entirety of its parent where possible */
     align-items: stretch;
     overflow-y: auto;
+
 }
 
 #calendar {
@@ -36,10 +38,12 @@
     /* minimum total height of the calendar */
     min-height: 400px; 
     position: relative;
+    background: linear-gradient(0deg, rgba(32,31,29,1) 0%, rgba(55,58,70,1) 75%);
+
     /* margin: 64px 24px 24px 72px; */
     flex: 1 1;
     height: 400px;
-    border: 2px solid hsla(0,0%,50.2%,.2);
+    /* border: 2px solid hsla(0,0%,50.2%,.2); */
     /* border-bottom: 2px solid hsla(0,0%,50.2%,.2); */
     /* border-right: 2px solid hsla(0,0%,50.2%,.2); */
 }
