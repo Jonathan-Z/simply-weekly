@@ -1,0 +1,236 @@
+@import url("https://cdn.jsdelivr.net/npm/@xz/fonts@1/serve/cascadia-code.min.css");
+* {
+    box-sizing: border-box;
+    
+    /* font-family: 'Cascadia Code', sans-serif; */
+}
+
+:root {
+    --time-label-width: 9ch;
+    --day-label-width: 3ch;
+}
+
+:root {
+    --time-label-width: 9ch;
+    --day-label-width: 2.5ch;
+}
+  
+  @keyframes fadeIn {
+    0% {opacity:0;}
+    100% {opacity:1;}
+  }
+
+#calendar-container {
+    display: flex;
+    flex: 1 1;
+    flex-direction: column;
+    /* make the inner content fill the entirety of its parent where possible */
+    align-items: stretch;
+    overflow-y: auto;
+}
+
+#calendar {
+    display: flex;
+    align-items: stretch;
+    flex-direction: row;
+    /* minimum total height of the calendar */
+    min-height: 400px; 
+    position: relative;
+    /* margin: 64px 24px 24px 72px; */
+    flex: 1 1;
+    height: 400px;
+    border: 2px solid hsla(0,0%,50.2%,.2);
+    /* border-bottom: 2px solid hsla(0,0%,50.2%,.2); */
+    /* border-right: 2px solid hsla(0,0%,50.2%,.2); */
+}
+
+#times {
+    display: flex;
+    position: absolute;
+    top: var(--day-label-width);
+    bottom: 0;
+    left: 0px;
+    right: 0;
+    flex-direction: column;
+    
+}
+
+.time {
+    position: relative;
+    flex: 1 1;
+    /* margin-top: -.5em; */
+}
+
+#days {
+    flex-direction: row;
+    display: flex;
+    position: absolute;
+    left: var(--time-label-width);
+    right: 0;
+    top: 0px;
+    bottom: 0px;
+}
+
+.day {
+    position: relative;
+    flex: 1 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.day::after {
+    content: "";
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    border: 1px solid hsla(0,0%,50.2%,.2)
+    /* width: 1px; */
+    /* background-color: hsla(0,0%,50.2%,.2); */
+}
+
+.label {
+    font-weight: bold;
+    padding: 2px 2px 0px 2px;
+    animation: fadeIn 7s;
+    -webkit-animation: fadeIn 7s;
+    -moz-animation: fadeIn 7s;
+    -o-animation: fadeIn 7s;
+    -ms-animation: fadeIn 7s;
+    /* padding: 2px; */
+}
+
+.day .label {
+    height: var(--day-label-width);
+    /* text-align: left; */
+    /* font-size: 1em; */
+    /* font-weight: 700; */
+    display: flex;
+
+    /* display: block; */
+    align-items: flex-end;
+    /* justify-content: left; */
+    justify-content: center;
+    padding-left: 3px;
+    padding-right: 3px;
+    /* padding-bottom: 8px; */
+}
+
+.time .label {
+    display: block;
+    width: var(--time-label-width);
+    /* padding-right: 8px; */
+    /* font-size: .8em; */
+    /* font-weight: 700; */
+    /* text-align: right; */
+}
+
+.time1{
+    color: white;
+}
+
+.time2 {
+    color: #6abed8;
+}
+
+.day2{
+    color: #6abed8;
+}
+.day1{
+    color: white;
+}
+
+.time::before {
+    content: "";
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    /* height: 1px; */
+    /* background-color: hsla(0,0%,50.2%,.2); */
+    border: 1px solid hsla(0,0%,50.2%,.2)
+}
+
+/* .event {
+    position: relative;
+    flex: 1 1;
+    display: flex;
+    flex-direction: column;
+    background: green;
+} */
+
+
+.event {
+    /* flex: 1 1; */
+    /* padding: 5px; */
+
+    font-weight: bold;
+    font-size: 80%;
+  }
+  
+  .calendar1 {
+    background-color: #9ec8dd;
+    border-color: #81cdf2;
+  }
+  
+  .calendar2 {
+    background-color: #9b9eb0;
+  border-color: #bcc3e5;
+  }
+  
+  .text-box {
+      margin-top: 450px;
+      align-items:center;
+      margin-left: 40%;
+  }
+
+  input[type=text] {
+    height: 75px;
+    word-wrap: break-word;
+    word-break: break-all;
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+  }
+
+  button {
+      width: 100%;
+      padding: 12px 20px;
+  }
+
+  button:focus {
+      background: #6abed8;
+  }
+
+  .eight-am {
+      /* margin-top: 30%; */
+      margin-top: 40px;
+  }
+
+  .eight-thirty-am {
+      /* margin-top: 60%; */
+      margin-top: 80px;
+  }
+
+  .nine-am {
+      margin-top: 120px;
+  }
+
+  .nine-thirty-am {
+      margin-top: 160px;
+  }
+
+  .ten-am {
+      margin-top: 200px;
+  }
+
+  .ten-thirty-am {
+      margin-top: 240px;
+  }
+
+  .eleven-am {
+      margin-top: 280px;
+  }
+
+  .eleven-thirty-am {
+      margin-top: 320px;
+  }
