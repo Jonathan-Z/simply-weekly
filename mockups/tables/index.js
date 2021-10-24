@@ -6,7 +6,7 @@ const calendar = document.querySelector("#holder");
 let eventSlots = document.querySelectorAll("#days .day .events");
 let div_times = document.querySelector("#times");
 let div_days = document.querySelector("#days");
-let submit = document.querySelector(".submit-button")
+let submit = document.querySelector(".submit-button");
 let info = document.querySelector(".text-box input");
 let pdfButton = document.querySelector(".pdf-btn");
 
@@ -58,7 +58,11 @@ function printPDF() {
 }
     
 calendar.addEventListener("click", handleClick);
-submit.addEventListener("click", () => {
+submit.addEventListener("click", sendToServer);
+info.addEventListener("submit", sendToServer);
+
+function sendToServer(e) {
+    e.preventDefault();
     console.log(info.value);
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.open( "GET", "http://127.0.0.1:5000/api/parse?name=simplyWeekly&text=" + info.value, false);
@@ -78,7 +82,8 @@ submit.addEventListener("click", () => {
     console.log(date.getSeconds());
     console.log(startTime);
     newEvent(day, startTime, duration, title, randomColor);
-})
+    info.value = "";
+}
 
 function handleClick(e) {
     console.log(e.target);
