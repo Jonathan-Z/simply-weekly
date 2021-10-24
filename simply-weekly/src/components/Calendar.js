@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import "./Calendar.css";
 // import {newEvent, updateEvent} from './Events.js';
 class Calendar extends Component {
-  state = {};
+  state = { funcs: null };
     handleClick(){
         console.log("hi");
         var xmlHttp = new XMLHttpRequest();
@@ -16,7 +16,13 @@ class Calendar extends Component {
         //     const responseData = JSON.parse(xmlHttp.responseText);
         //     document.getElementsByClassName('message')[0].innerHTML = JSON.stringify(responseData);
         // }
-  }
+    }
+    
+    componentDidMount() {
+        // window['init']();
+        
+    }  
+
   render() {
     return (
         <div>
