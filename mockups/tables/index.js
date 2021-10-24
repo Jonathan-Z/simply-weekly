@@ -12,7 +12,7 @@ randButton.addEventListener("click", () => {
     const day = Math.floor(Math.random() * 6);
     const startTime = Math.floor(Math.random() * parseInt(styles.getPropertyValue("--time-divisions")));
     const duration = 1 + Math.floor(Math.random() * 5);
-    newEvent(day, startTime, duration, "test event", "red");
+    newEvent(day, startTime, duration, "test event", "#6abed8");
 });
 
 function newEvent(day, start, duration, label, color) {
