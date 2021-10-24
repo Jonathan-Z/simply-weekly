@@ -95,6 +95,7 @@
 
 /* Times */
 #times {
+    background-color: transparent;
     display: flex;
     position: absolute;
     top: 0;
@@ -105,6 +106,7 @@
 }
 
 .time {
+    background-color: transparent;
     position: relative;
     flex: 0 0 var(--cell-height);
 }
@@ -127,6 +129,7 @@
 
 /* Days */
 #days {
+    background-color: transparent;
     flex-direction: row;
     display: flex;
     position: absolute;
@@ -138,6 +141,7 @@
 }
 
 .day {
+    background-color: transparent;
     position: relative;
     flex: 1 1;
     display: flex;

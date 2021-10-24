@@ -120,11 +120,14 @@
         <input type="text" placeholder="Type what you want added to calendar"></input>
         <button class="submit-button" type="submit">Submit</button>
     </div>
-    <div className="background-print"></div>
+    <div class="background-print"></div>
+    <!-- <button class="pdf-btn">Print to PDF!</button> -->
         
     <!-- <button id="generateTest">Add Random</button> -->
     
     <!--Generally, it is best practice to place the script at the end of the body so the page is fully loaded and rendered before it loads and parses the JS-->
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
     <script src="./index.js"></script>
 </body>
 

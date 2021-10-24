@@ -8,7 +8,55 @@ let div_times = document.querySelector("#times");
 let div_days = document.querySelector("#days");
 let submit = document.querySelector(".submit-button")
 let info = document.querySelector(".text-box input");
+let pdfButton = document.querySelector(".pdf-btn");
 
+const { jsPDF } = window.jspdf;
+
+// from https://stackoverflow.com/questions/25946275/exporting-pdf-with-jspdf-not-rendering-css/43064789#43064789
+// https://stackoverflow.com/questions/26481645/how-to-use-html2canvas-and-jspdf-to-export-to-pdf-in-a-proper-and-simple-way
+if (pdfButton != null) {
+    pdfButton.addEventListener("click", () => {
+        html2canvas(document.body, {
+            allowTaint: true,
+            useCORS: true,
+        })
+        .then(function (canvas) {
+            // It will return a canvas element
+                let image = canvas.toDataURL("image/png", 0.5);
+                pdfButton.setAttribute("href", image);
+                pdfButton.setAttribute("download", "calendar.pdf");
+                // pdfButton.click();
+            window.open(image);
+        })
+        .catch((e) => {
+            // Handle errors
+            console.log(e);
+        });
+          
+    });
+}
+
+
+function printPDF() {
+    var w = calendar.offsetWidth;
+    var h = calendar.offsetHeight;
+    html2canvas(calendar, {
+    dpi: 300, // Set to 300 DPI
+    scale: 3, // Adjusts your resolution
+    onrendered: function(canvas) {
+        var img = canvas.toDataURL("image/png");
+        var doc = new jsPDF('L', 'px', [w, h]);
+        doc.addImage(img, 'JPEG', 0, 0, w, h);
+        var blobPDF =  new Blob([ doc.output() ], { type : 'application/pdf'});
+        var blobUrl = URL.createObjectURL(blobPDF)
+        console.log('done')
+        pdfButton.setAttribute("href", blobUrl);
+        pdfButton.setAttribute("download", "calendar.pdf");
+        window.open(blobUrl);
+        }
+    });
+}
+    
 calendar.addEventListener("click", handleClick);
 submit.addEventListener("click", () => {
     console.log(info.value);
