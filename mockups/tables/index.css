@@ -1,3 +1,5 @@
+@import url("https://cdn.jsdelivr.net/npm/@xz/fonts@1/serve/cascadia-code.min.css");
+
 * {
     box-sizing: border-box;
 }
@@ -7,7 +9,14 @@
     --day-label-height: 1.5em;
     --time-divisions: 9;
     /* --calendar-height: 40em; */
-    --border-color: rgb(128, 128, 128);
+    --border-color: rgb(173, 173, 173);
+    background: #201F1D;
+    margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
     --border-thickness: 2px;
     /* cell height = (calendar height - day label height - 2*border thickness) / time divisions */
     /* --cell-height: calc((var(--calendar-height)) / var(--time-divisions)); */
@@ -15,6 +24,35 @@
     --calendar-height: calc(var(--time-divisions) * var(--cell-height));
 }
 
+.header-text {
+  height: 75px;
+  width: auto;
+  padding: 0px;
+  margin: 0px;
+  text-align: center;
+  font-family: "Cascadia Code", sans-serif;
+  padding: 10px;
+}
+
+.simply {
+  color: white;
+}
+
+.weekly {
+  color: #6abed8;
+}
+
+.fade-in-image {
+    animation: fadeIn 4s;
+    -webkit-animation: fadeIn 4s;
+    -moz-animation: fadeIn 4s;
+    -o-animation: fadeIn 4s;
+    -ms-animation: fadeIn 4s;
+  }
+  @keyframes fadeIn {
+    0% {opacity:0;}
+    100% {opacity:1;}
+  }
 /* Calendar */
 #calendar-container {
     font-family: "Calibri";
@@ -101,6 +139,7 @@
     display: block;
     text-align: center;
     overflow: hidden;
+    color: white;
 }
 
 .day::after {
@@ -112,6 +151,10 @@
     right: 0px;
     width: 0px;
     border-left: 1px solid var(--border-color);
+}
+
+span .label {
+    color: white;
 }
 
 /* Events */
@@ -134,3 +177,40 @@
     text-align: center;
 }
 
+
+.text-box {
+    /* margin-top: 450px; */
+    align-items: center;
+    width: 50%;
+    min-width: 500px;
+    /* margin-left: 40%; */
+    margin:auto;
+}
+
+input[type=text] {
+    height: 75px;
+    word-wrap: break-word;
+    word-break: break-all;
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+}
+
+button {
+    width: 100%;
+    padding: 12px 20px;
+}
+
+button:focus {
+    background: #6abed8;
+}
+
+#generateTest {
+    margin-top: 100px;
+    align-items: center;
+    margin-left: 25%;
+    width: 50%;
+    min-width: 500px;    text-align: center;
+    align-items: center;
+}

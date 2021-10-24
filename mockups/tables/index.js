@@ -12,7 +12,7 @@ randButton.addEventListener("click", () => {
     const day = Math.floor(Math.random() * 6);
     const startTime = Math.floor(Math.random() * parseInt(styles.getPropertyValue("--time-divisions")));
     const duration = 1 + Math.floor(Math.random() * 5);
-    newEvent(day, startTime, duration, "test event", "red");
+    newEvent(day, startTime, duration, "test event", "#6abed8");
 });
 
 function newEvent(day, start, duration, label, color) {
@@ -33,9 +33,9 @@ function newEvent(day, start, duration, label, color) {
 function updateEvent(n_event, day, start, duration, label, color) {
     const oldStyles = getComputedStyle(n_event);
 
-    const p_start = "calc(" + start.toString() + " * var(--cell-height))";
-    const p_duration = "calc(" + duration.toString() + " * var(--cell-height))";
-    const n_label = n_event.querySelector("span");
+    let p_start = "calc(" + start.toString() + " * var(--cell-height))";
+    let p_duration = "calc(" + duration.toString() + " * var(--cell-height))";
+    let n_label = n_event.querySelector("span");
 
     if (start == null) {
         p_start = oldStyles.getPropertyValue("top");
@@ -57,13 +57,3 @@ function updateEvent(n_event, day, start, duration, label, color) {
         eventSlots[day].appendChild(n_event);
     }
 }
-
-function handleClick(){
-    console.log("hi");
-    var xmlHttp = new XMLHttpRequest();
-    xmlHttp.open( "GET", "http://127.0.0.1:5000/api/parse?name={CalName}&text={calText}", false);
-    xmlHttp.send();
-    const responseData = xmlHttp.response;
-    {responseData.map(user => (
-    <li key={user.startTime}>{user.startTime}</li>
-  ))}
