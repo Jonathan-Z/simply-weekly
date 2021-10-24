@@ -7,7 +7,15 @@ class Calendar extends Component {
         console.log("hi");
         var xmlHttp = new XMLHttpRequest();
         xmlHttp.open( "GET", "http://127.0.0.1:5000/api/parse?name={CalName}&text={calText}", false);
-        xmlHttp.send()
+        xmlHttp.send();
+        const responseData = xmlHttp.response;
+        {responseData.map(user => (
+        <li key={user.startTime}>{user.startTime}</li>
+      ))}
+        // xmlHttp.onload = function(){
+        //     const responseData = JSON.parse(xmlHttp.responseText);
+        //     document.getElementsByClassName('message')[0].innerHTML = JSON.stringify(responseData);
+        // }
   }
   render() {
     return (
@@ -78,6 +86,8 @@ class Calendar extends Component {
                 <div className="day day1">
                     <span className="label">Sunday</span>
                 </div>
+                      <div className="background-print"></div>
+
             </div>
         </div>
       </div>

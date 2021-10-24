@@ -28,6 +28,7 @@
     /* make the inner content fill the entirety of its parent where possible */
     align-items: stretch;
     overflow-y: auto;
+        /* background: linear-gradient(0deg, rgba(32,31,29,1) 0%, rgba(55,58,70,1) 100%); */
 
 }
 
@@ -38,12 +39,11 @@
     /* minimum total height of the calendar */
     min-height: 400px; 
     position: relative;
-    background: linear-gradient(0deg, rgba(32,31,29,1) 0%, rgba(55,58,70,1) 75%);
-
     /* margin: 64px 24px 24px 72px; */
     flex: 1 1;
     height: 400px;
-    /* border: 2px solid hsla(0,0%,50.2%,.2); */
+    border: 2px solid hsla(0,0%,50.2%,.2);
+    background: #201F1D;
     /* border-bottom: 2px solid hsla(0,0%,50.2%,.2); */
     /* border-right: 2px solid hsla(0,0%,50.2%,.2); */
 }
@@ -95,11 +95,11 @@
 .label {
     font-weight: bold;
     padding: 2px 2px 0px 2px;
-    animation: fadeIn 7s;
-    -webkit-animation: fadeIn 7s;
-    -moz-animation: fadeIn 7s;
-    -o-animation: fadeIn 7s;
-    -ms-animation: fadeIn 7s;
+    animation: fadeIn 4s;
+    -webkit-animation: fadeIn 4s;
+    -moz-animation: fadeIn 4s;
+    -o-animation: fadeIn 4s;
+    -ms-animation: fadeIn 4s;
     /* padding: 2px; */
 }
 
