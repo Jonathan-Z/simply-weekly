@@ -19,78 +19,90 @@ class Calendar extends Component {
   }
   render() {
     return (
-      <div className="calendar-container">
-        <div id="calendar">
-        <div class="text-box">
+        <div>
+            <div className="calendar-container">
+                <div className="calendar">
+                    <div className="times">
+                        <span className="time">
+                            <span className="label">7:30am</span>
+                        </span>
+                        <span className="time">
+                            <span className="label">8:00am</span>
+                        </span>
+                        <span className="time">
+                            <span className="label">8:30am</span>
+                        </span>
+                        <span className="time">
+                            <span className="label">9:00am</span>
+                        </span>
+                        <span className="time">
+                            <span className="label">9:30am</span>
+                        </span>
+                        <span className="time">
+                            <span className="label">10:00am</span>
+                        </span>
+                        <span className="time">
+                            <span className="label">10:30am</span>
+                        </span>
+                        <span className="time">
+                            <span className="label">11:00am</span>
+                        </span>
+                        <span className="time">
+                            <span className="label">11:30am</span>
+                        </span>
+                    </div>
+                    
+                    <div className="days">
+                        <div className="day">
+                            <span className="label">Monday</span>
+                            <div className="events">
+                                <div className="event" style={{ top: "calc(0 * var(--cell-height)", height: "calc(var(--cell-height))", backgroundColor: "gold" }}>
+                                    <span>test event</span>
+                                </div>
+                                <div className="event" style={{ top: "calc(2 * var(--cell-height)", height: "calc(2 * var(--cell-height)", backgroundColor: "tomato" }}>
+                                    <span>cool things</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="day">
+                            <span className="label">Tuesday 9/6</span>
+                            <div className="events">
+                            </div>
+                        </div>
+                        <div className="day">
+                            <span className="label">Wednesday 9/7</span>
+                            <div className="events">
+                            </div>
+                        </div>
+                        <div className="day">
+                            <span className="label">Thursday 9/8</span>
+                            <div className="events">
+                            </div>
+                        </div>
+                        <div className="day">
+                            <span className="label">Friday 9/9</span>
+                            <div className="events">
+                            </div>
+                        </div>
+                        <div className="day">
+                            <span className="label">Saturday 9/10</span>
+                            <div className="events">
+                            </div>
+                        </div>
+                        <div className="day">
+                            <span className="label">Sunday 9/11</span>
+                            <div className="events">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div className="text-box">
                 <input type="text" placeholder="Type what you want added to calendar"></input>
                 <button className="submit-button" onClick={this.handleClick} type="submit">Submit</button>
-  </div>
-            <div id="times">
-                <span className="time time1">
-                    <span className="label">7:30am</span>
-                </span>
-                <span className="time time2">
-                    <span className="label">8:00am</span>
-                </span>
-                <span className="time time1">
-                    <span className="label">8:30am</span>
-                </span>
-                <span className="time time2">
-                    <span className="label">9:00am</span>
-                </span>
-                <span className="time time1">
-                    <span className="label">9:30am</span>
-                </span>
-                <span className="time time2">
-                    <span class="label">10:00am</span>
-                </span>
-                <span className="time time1">
-                    <span className="label">10:30am</span>
-                </span>
-                <span className="time time2">
-                    <span className="label">11:00am</span>
-                </span>
-                <span className="time time1">
-                    <span className="label">11:30am</span>
-                </span>
             </div>
-            <div id="days">
-                <div className="day day1">
-                    <span className="label">Monday</span>
-                    <span className="label event event1 calendar1">Event 1</span>
-                    <span className="label event event1 calendar1"></span>
-
-                </div>
-                <div className="day day2">
-                    <span className="label">Tuesday</span>
-                </div>
-                <div className="day day1">
-                    <span className="label">Wednesday</span>
-                    <span className="label"></span>
-                    <span className="label event event1 calendar2">Event 2</span>
-                    <span className="label event event1 calendar2"></span>
-                    <span className="label event event1 calendar2"></span>
-                    <span className="label event event1 calendar2"></span>
-                    <span className="label event event1 calendar2"></span>
-                </div>
-                <div className="day day2">
-                    <span className="label">Thursday</span>
-                </div>
-                <div className="day day1">
-                    <span className="label">Friday</span>
-                    <span className="label event event1 calendar1 eleven-thirty-am ">Event 3</span>
-                </div>
-                <div className="day day2">
-                    <span className="label">Saturday</span>
-                </div>
-                <div className="day day1">
-                    <span className="label">Sunday</span>
-                </div>
-                      <div className="background-print"></div>
-
-            </div>
+            <div className="background-print"></div>
         </div>
-      </div>
     );
   }
 }
