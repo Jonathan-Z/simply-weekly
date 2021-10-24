@@ -33,6 +33,7 @@
 
 #holder {
     height: 60vh;
+    padding: 0  1em 0 1em;
     overflow: auto;
 }
 
@@ -75,7 +76,7 @@
 }
 
 #calendar {
-    margin: var(--day-label-height) var(--time-label-width) var(--day-label-height) var(--time-label-width);
+    margin: var(--day-label-height) 0 var(--day-label-height) var(--time-label-width);
     min-height: var(--calendar-height);
     height: var(--calendar-height);
     overflow: visible;
