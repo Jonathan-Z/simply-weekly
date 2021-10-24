@@ -1,351 +1,454 @@
-from datetime import datetime, timedelta, date
-import heapq
-import math
+from dataclasses import dataclass
+from datetime import date, datetime, timedelta
+import functools
 import re
-from typing import List
+from typing import List, Any
 
 from dateutil.relativedelta import relativedelta
-from difflib import SequenceMatcher
 from fuzzywuzzy import fuzz
-from titlecase import titlecase
+import inflect
+import numpy as np
 
 
-def has_fuzzy_match(word: str, sentence: List[str], threshold=80) -> bool:
-    s = SequenceMatcher()
-    s.set_seq2(word)
-    for x in sentence:
-        s.set_seq1(x)
-        if s.real_quick_ratio() * 100 >= threshold \
-                and s.quick_ratio() * 100 >= threshold \
-                and s.ratio() * 100 >= threshold:
-            return True
-    return False
+@dataclass
+class DataSpec:
+    data: Any
+    mask: np.ndarray
+    score: int
 
 
-def fuzzy_matches(word: str, sentence: List[str], n=5, threshold=80):
-    results = []
-    s = SequenceMatcher()
-    s.set_seq2(word)
-    for i, x in enumerate(sentence):
-        s.set_seq1(x)
-        if s.real_quick_ratio() * 100 >= threshold and s.quick_ratio() * 100 >= threshold:
-            ratio = s.ratio()
-            if ratio * 100 >= threshold:
-                results.append((ratio * 100, i))
-
-    # Move the best scorers to head of list
-    return heapq.nlargest(n, results)
+def fuzzy_match(a, b, threshold=80):
+    return fuzz.ratio(a, b) > threshold
 
 
-def extract_best_datelike(sentence: List[str], is_title: List[bool]):
-    best_event_date = None
-    best_date_score = -math.inf
-    best_date_sentence_idx = None
+def mask_prepositions(score_bonus=20, additional_prepositions=None):
+    prepos = ['a', 'after', 'at', 'by', 'during', 'from', 'in', 'of', 'on', 'the', 'this', 'to']
+    if additional_prepositions is not None:
+        prepos.extend(additional_prepositions)
+
+    def mask_prepositions_decorator(func):
+        @functools.wraps(func)
+        def mask_prepositions_wrapper(sentence):
+            specs: List[DataSpec] = func(sentence)
+            for spec in specs:
+                run_length = 0
+                for i in range(len(spec.mask) - 2, -1, -1):
+                    if spec.mask[i + 1] and any(fuzzy_match(sentence[i], xx) for xx in prepos) and run_length < 5:
+                        spec.mask[i] = True
+                        spec.score += score_bonus
+                        run_length += 1
+                    else:
+                        run_length = 0
+            return specs
+        return mask_prepositions_wrapper
+    return mask_prepositions_decorator
+
+
+# TODO: date specs: day of week, relative day, actual date
+# TODO: time specs: part of day, time (multiple formats)
+@mask_prepositions(score_bonus=20, additional_prepositions=['coming'])
+def day_of_week_specs(sentence: List[str]):
+    specs = []
+
+    days_of_week = (
+        'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'
+    )
+
+    def next_week_day(day_of_week: int):
+        return datetime.today().date() + timedelta((day_of_week - datetime.today().date().weekday()) % 7)
+
+    for i, day_name in enumerate(days_of_week):
+        for j, word in enumerate(sentence):
+            if fuzzy_match(word, day_name):
+                mask = np.zeros(shape=len(sentence), dtype=bool)
+                mask[j] = True
+                specs.append(DataSpec(
+                    next_week_day(i),
+                    mask,
+                    100
+                ))
+            elif fuzzy_match(word, day_name[:3]):
+                mask = np.zeros(shape=len(sentence), dtype=bool)
+                mask[j] = True
+                specs.append(DataSpec(
+                    next_week_day(i),
+                    mask,
+                    75
+                ))
+    return specs
+
+
+@mask_prepositions()
+def relative_day_specs(sentence: List[str]):
+    specs = []
 
     relative_days = {
         'today': 0,
-        'day after tomorrow': 2,
-        'day after tmrw': 2,
         'tmrw': 1,
         'tomorrow': 1,
+        'day after tmrw': 2,
+        'day after tomorrow': 2
     }
+
     for relative_day, offset in relative_days.items():
-        if relative_day.startswith('day'):
-            for idx in range(len(sentence) - 2):
-                if fuzz.ratio(' '.join(sentence[idx:idx+3]), relative_day) > 80:
-                    is_title[idx] = False
-                    is_title[idx + 1] = False
-                    is_title[idx + 2] = False
-                    if idx >= 1 and fuzz.ratio(sentence[idx - 1], 'during') > 80:
-                        is_title[idx - 1] = False
-                    if idx >= 1 and fuzz.ratio(sentence[idx - 1], 'the') > 60:
-                        is_title[idx - 1] = False
-                        if idx >= 2 and sentence[idx - 2] in ('on', 'during'):
-                            is_title[idx - 2] = False
-                    return datetime.today().date() + timedelta(days=offset)
-        elif has_fuzzy_match(relative_day, sentence):
-            idx = fuzzy_matches(relative_day, sentence)[0][1]
-            is_title[idx] = False
-            if idx >= 1 and fuzz.ratio(sentence[idx - 1], 'during') > 80:
-                is_title[idx - 1] = False
-            return datetime.today().date() + timedelta(days=offset)
+        k = len(relative_day.split())
+        for i in range(len(sentence) + 1 - k):
+            if fuzzy_match(' '.join(sentence[i: i + k]), relative_day):
+                mask = np.zeros(shape=len(sentence), dtype=bool)
+                for j in range(k):
+                    mask[i + j] = True
+                specs.append(DataSpec(
+                    datetime.today().date() + timedelta(days=offset),
+                    mask,
+                    score=80 + 10*k,
+                ))
+    return specs
+
+
+@mask_prepositions()
+def month_specs(sentence: List[str]):
+    specs = []
 
     months = ('january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october',
               'november', 'december')
-    month_num = datetime.today().month
-    month_bonus = 0
-    month_idx = None
-    for i, month_name in enumerate(months):
-        if has_fuzzy_match(month_name, sentence):
-            month_num = i + 1
-            month_bonus = 100
-            month_idx = fuzzy_matches(month_name, sentence)[0][1]
-            break
-        if month_bonus == 0 and has_fuzzy_match(month_name[:3], sentence):
-            month_num = i + 1
-            month_bonus = 100
-            month_idx = fuzzy_matches(month_name[:3], sentence)[0][1]
+    for i in range(12):
+        for j, word in enumerate(sentence):
+            if fuzzy_match(word, months[i]):
+                mask = np.zeros(shape=len(sentence), dtype=bool)
+                mask[j] = True
+                specs.append(DataSpec(
+                    i,
+                    mask,
+                    100
+                ))
+            elif fuzzy_match(word, months[i][:3]):
+                mask = np.zeros(shape=len(sentence), dtype=bool)
+                mask[j] = True
+                specs.append(DataSpec(
+                    i,
+                    mask,
+                    75
+                ))
+    return specs
 
-    if month_idx is not None:
-        is_title[month_idx] = False
-    for i in (month_idx - 2, month_idx - 1, month_idx + 1) if month_idx is not None else range(len(sentence)):
-        if month_idx is not None and i == month_idx - 2 and sentence[month_idx - 1] != 'of':
-            continue
-        if i < 0 or i >= len(sentence):
-            continue
-        word = sentence[i]
-        if re.fullmatch('[0-3]?[0-9](st|nd|rd|th)', word) and 1 <= int(word[:-2]) <= 31:
-            try:
-                day_num = int(word[:-2])
-                best_event_date = date(datetime.today().year, month_num, day_num)
-                is_title[i] = False
-                if month_idx is not None and i == month_idx - 2:
-                    is_title[month_idx - 1] = False
-                if i >= 1:
-                    if sentence[i - 1] == 'on' or fuzz.ratio(sentence[i - 1], 'during') > 80:
-                        is_title[i - 1] = False
-                    elif i >= 2 and sentence[i - 1] == 'the' and sentence[i - 2] == 'on':
-                        is_title[i - 1] = False
-                        is_title[i - 2] = False
-                if month_idx is not None and month_idx >= 1:
-                    if sentence[month_idx - 1] == 'on' or fuzz.ratio(sentence[month_idx - 1], 'during') > 80:
-                        is_title[month_idx - 1] = False
-                if month_idx is None and best_event_date < datetime.today().date():
-                    best_event_date += relativedelta(months=1)
-                return best_event_date
-            except ValueError:  # invalid date
+
+@mask_prepositions()
+def absolute_date_specs(sentence: List[str]):
+    specs = []
+
+    p = inflect.engine()
+    ordinals = {
+        p.ordinal(i): i
+        for i in range(1, 32)
+    }
+    full_ordinals = {
+        p.number_to_words(p.ordinal(i)): i
+        for i in range(1, 32)
+    }
+    for month_spec in month_specs(sentence):
+        for i, word in enumerate(sentence):
+            # Only consider i if it comes directly before or after a month
+            if month_spec.mask[i] or (
+                not (i + 1 < len(sentence) and month_spec.mask[i + 1])
+                and not (i >= 1 and month_spec.mask[i - 1])
+            ):
                 continue
-        elif word.isdecimal() and 1 <= int(word) <= 31:
-            date_score = month_bonus + 50
-            day_num = int(word)
-            event_date = date(datetime.today().year, month_num, day_num)
-            if event_date < datetime.today().date() and month_idx is None:
-                date_score -= 1
-                event_date += relativedelta(months=1)
-            if date_score > best_date_score:
-                best_event_date = event_date
-                best_date_score = date_score
-                best_date_sentence_idx = i
 
-    if best_date_sentence_idx is not None:
-        if month_idx is not None and best_date_sentence_idx == month_idx - 2:
-            is_title[month_idx - 1] = False
-        if best_date_sentence_idx >= 1:
-            if sentence[best_date_sentence_idx - 1] == 'on' \
-                    or fuzz.ratio(sentence[best_date_sentence_idx - 1], 'during') > 80:
-                is_title[best_date_sentence_idx - 1] = False
-            elif best_date_sentence_idx >= 2 \
-                    and sentence[best_date_sentence_idx - 1] == 'the'\
-                    and sentence[best_date_sentence_idx - 2] == 'on':
-                is_title[best_date_sentence_idx - 1] = False
-                is_title[best_date_sentence_idx - 2] = False
-        if month_idx is not None and month_idx >= 1:
-            if sentence[month_idx - 1] == 'on' or fuzz.ratio(sentence[month_idx - 1], 'during') > 80:
-                is_title[month_idx - 1] = False
-        if month_idx is None and best_event_date < datetime.today().date():
-            best_event_date += relativedelta(months=1)
+            if word in full_ordinals:
+                day = full_ordinals[word] + 1
+                try:
+                    new_date = date(year=datetime.today().year, month=1+month_spec.data, day=day)
+                except ValueError:
+                    continue
+                else:
+                    if new_date + timedelta(days=100) < datetime.today().date():
+                        new_date += relativedelta(years=1)
+                    mask = np.zeros(shape=len(sentence), dtype=bool)
+                    mask[i] = True
+                    specs.append(DataSpec(
+                        new_date,
+                        mask | month_spec.mask,
+                        score=120
+                    ))
+            elif word in ordinals:
+                try:
+                    new_date = date(year=datetime.today().year, month=1+month_spec.data, day=ordinals[word])
+                except ValueError:
+                    continue
+                else:
+                    if new_date + timedelta(days=100) < datetime.today().date():
+                        new_date += relativedelta(years=1)
+                    mask = np.zeros(shape=len(sentence), dtype=bool)
+                    mask[i] = True
+                    specs.append(DataSpec(
+                        new_date,
+                        mask | month_spec.mask,
+                        score=120
+                    ))
+            elif word.isdecimal() and 1 <= int(word) <= 31:
+                try:
+                    new_date = date(year=datetime.today().year, month=1+month_spec.data, day=int(word))
+                except ValueError:
+                    continue
+                else:
+                    if new_date + timedelta(days=100) < datetime.today().date():
+                        new_date += relativedelta(years=1)
+                    mask = np.zeros(shape=len(sentence), dtype=bool)
+                    mask[i] = True
+                    specs.append(DataSpec(
+                        new_date,
+                        mask | month_spec.mask,
+                        score=50
+                    ))
+            elif all(ord('a') <= ord(c) <= ord('z') for c in word) and 5 <= len(word) <= 15:
+                for full_ordinal in full_ordinals:
+                    if fuzzy_match(word, full_ordinal):
+                        day = full_ordinals[word] + 1
+                        try:
+                            new_date = date(year=datetime.today().year, month=1 + month_spec.data, day=day)
+                        except ValueError:
+                            continue
+                        else:
+                            if new_date + timedelta(days=100) < datetime.today().date():
+                                new_date += relativedelta(years=1)
+                            mask = np.zeros(shape=len(sentence), dtype=bool)
+                            mask[i] = True
+                            specs.append(DataSpec(
+                                new_date,
+                                mask | month_spec.mask,
+                                score=100
+                            ))
+                        break
 
-    # used_day_of_week = False
-    for i, day_of_week in enumerate(('monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday')):
-        if has_fuzzy_match(day_of_week, sentence):
-            event_date = datetime.today().date() + timedelta(days=(i - datetime.today().weekday()) % 7)
-            date_score, date_sentence_idx = fuzzy_matches(day_of_week, sentence)[0]
-            date_score += 25
-            if date_score > best_date_score:
-                best_event_date = event_date
-                best_date_score = date_score
-                best_date_sentence_idx = date_sentence_idx
-                if best_date_score == 125:
-                    # used_day_of_week = True
-                    break
-        if has_fuzzy_match(day_of_week[:3], sentence, threshold=100):
-            event_date = datetime.today().date() + timedelta(days=(i - datetime.today().weekday()) % 7)
-            date_score, date_sentence_idx = fuzzy_matches(day_of_week[:3], sentence)[0]
-            if date_score > best_date_score:
-                best_event_date = event_date
-                best_date_score = date_score
-                best_date_sentence_idx = date_sentence_idx
-                # used_day_of_week = True
-
-    # if used_day_of_week and best_date_sentence_idx >= 1 and sentence[best_date_sentence_idx - 1] == 'next':
-    #     best_event_date += timedelta(days=7)
-
-    if best_event_date is None:
-        best_event_date = datetime.today().date()
-    else:
-        is_title[best_date_sentence_idx] = False
-        if best_date_sentence_idx >= 1 and sentence[best_date_sentence_idx - 1] in ('on', 'for', 'next', 'the'):
-            is_title[best_date_sentence_idx - 1] = False
-
-    return best_event_date
-
-
-def extract_end_time(sentence: List[str], is_title: List[bool], start_from: int, start_datetime: datetime):
-    start_date_datetime = datetime(start_datetime.year, start_datetime.month, start_datetime.day)
-    best_idx = None
-    ret = None
     for i, word in enumerate(sentence):
-        if i < start_from:
-            continue
-        if i > start_from + 2:
-            break
-        if re.fullmatch(
-            '(0?[0-9]|1[0-2]):[0-5][0-9][ap]m?',
-            word
-        ):
-            hours = int(word.split(':')[0])
-            if word.endswith('m'):
-                minutes = int(word[-4:-2])
+        m = re.fullmatch('(2[0-9]{3})[-/]?(0?[1-9]|1[0-2])[-/]?(0?[1-9]|[1-2][0-9]|3[0-1])', word)
+        if m:
+            try:
+                new_date = date(year=int(m[1]), month=int(m[2]), day=int(m[3]))
+            except ValueError:
+                continue
             else:
-                minutes = int(word[-3:-1])
-            if word.endswith('a') or word.endswith('am'):
-                ret = start_date_datetime + timedelta(hours=hours, minutes=minutes)
+                mask = np.zeros(shape=len(sentence), dtype=bool)
+                mask[i] = True
+                specs.append(DataSpec(
+                    new_date,
+                    mask,
+                    score=200
+                ))
+        m2 = re.fullmatch('(0?[1-9]|1[0-2])[-/](0?[1-9]|[1-2][0-9]|3[0-1])', word)
+        if m2:
+            try:
+                new_date = date(year=datetime.today().year, month=int(m2[1]), day=int(m2[2]))
+            except ValueError:
+                continue
             else:
-                ret = start_date_datetime + timedelta(hours=12 + hours, minutes=minutes)
-            best_idx = i
-            break
-        if re.fullmatch(
-            '(0?[0-9]|1[0-2])[ap]m?',
-            word
-        ):
-            hours = int(word[:-2] if word.endswith('m') else word[:-1])
-            minutes = 0
-            if word.endswith('a') or word.endswith('am'):
-                ret = start_date_datetime + timedelta(hours=hours, minutes=minutes)
-            else:
-                ret = start_date_datetime + timedelta(hours=12 + hours, minutes=minutes)
-            best_idx = i
-            break
-        if re.fullmatch(
-            '(0?[0-9]|1[0-9]|2[0-4]):[0-5][0-9]',
-            word
-        ):
-            hours = int(word.split(':')[0])
-            minutes = int(word.split(':')[1])
-            if hours <= 12 and i + 1 < len(sentence) and sentence[i] in ('am', 'pm'):
-                hours += 12
-            best_idx = i
-            ret = start_date_datetime + timedelta(hours=hours, minutes=minutes)
-            break
-        if word.isdecimal() and i > 1 and is_title[i - 1] and is_title[i]:
-            hours = int(word)
-            best_idx = i
-            ret = start_date_datetime + timedelta(hours=hours)
-            break
-    if ret is not None:
-        is_title[best_idx] = False
-        if best_idx >= 1 and sentence[best_idx - 1] in ('from', 'at', 'to'):
-            is_title[best_idx - 1] = False
-        return ret
-    return None
-   
+                mask = np.zeros(shape=len(sentence), dtype=bool)
+                mask[i] = True
+                specs.append(DataSpec(
+                    new_date,
+                    mask,
+                    score=150
+                ))
 
-def extract_best_datetime_duration(sentence: List[str], is_title: List[bool]):
-    event_date = extract_best_datelike(sentence, is_title)
-    event_date = datetime(event_date.year, event_date.month, event_date.day)
+    return specs
 
-    time_names = {
-        'morning': 7,
+
+@mask_prepositions()
+def part_of_day_specs(sentence: List[str]):
+    specs = []
+
+    parts_of_day = {
+        'morning': 9,
         'noon': 12,
         'afternoon': 15,
         'evening': 18,
         'night': 21,
         'midnight': 24
     }
+    for part_of_day, hours in parts_of_day.items():
+        for i, word in enumerate(sentence):
+            if fuzzy_match(word, part_of_day):
+                mask = np.zeros(shape=len(sentence), dtype=bool)
+                mask[i] = True
+                specs.append(DataSpec(
+                    (hours, 0, i),
+                    mask,
+                    score=80
+                ))
+    return specs
 
-    best_idx = None
-    ret = None
+
+@mask_prepositions()
+def absolute_time_specs(sentence: List[str]):
+    specs = []
+
     for i, word in enumerate(sentence):
-        done = False
-        for time_name, time_name_hours in time_names.items():
-            if fuzz.ratio(word, time_name) > 80:
-                best_idx = i
-                ret = event_date + timedelta(hours=time_name_hours)
-                done = True
-                break
-        if done:
-            break
-        if re.fullmatch(
-            '(0?[0-9]|1[0-2]):[0-5][0-9][ap]m?',
+        m = re.fullmatch(
+            '(0?[0-9]|1[0-9]|2[0-4])(:?[0-5][0-9])?([ap]m)?',
             word
-        ):
-            hours = int(word.split(':')[0])
-            if word.endswith('m'):
-                minutes = int(word[-4:-2])
-            else:
-                minutes = int(word[-3:-1])
-            if word.endswith('a') or word.endswith('am'):
-                ret = event_date + timedelta(hours=hours, minutes=minutes)
-            else:
-                ret = event_date + timedelta(hours=12 + hours, minutes=minutes)
-            best_idx = i
-            break
-        if re.fullmatch(
-            '(0?[0-9]|1[0-2])[ap]m?',
-            word
-        ):
-            hours = int(word[:-2] if word.endswith('m') else word[:-1])
+        )
+        if not m:
+            continue
+        score = 10
+        hours = int(m[1])
+        if m[2] is None:
             minutes = 0
-            if word.endswith('a') or word.endswith('am'):
-                ret = event_date + timedelta(hours=hours, minutes=minutes)
-            else:
-                ret = event_date + timedelta(hours=12 + hours, minutes=minutes)
-            best_idx = i
-            break
-        if re.fullmatch(
-            '(0?[0-9]|1[0-9]|2[0-4]):[0-5][0-9]',
-            word
-        ):
-            hours = int(word.split(':')[0])
-            minutes = int(word.split(':')[1])
-            if hours <= 12 and i + 1 < len(sentence) and sentence[i] in ('am', 'pm'):
-                hours += 12
-            best_idx = i
-            ret = event_date + timedelta(hours=hours, minutes=minutes)
-            break
-        if best_idx is None and word.isdecimal() and i > 1 and is_title[i - 1] and is_title[i]:
-            hours = int(word)
-            best_idx = i
-            ret = event_date + timedelta(hours=hours)
-            if i + 1 < len(sentence) and (sentence[i + 1] == 'to' or re.fullmatch('[0-2]?[0-9](:[0-5][0-9])?([ap]m?)?', sentence[i + 1])):
-                break
-    if ret is not None:
-        is_title[best_idx] = False
-        if best_idx >= 1 and sentence[best_idx - 1] in ('from', 'at', 'to'):
-            is_title[best_idx - 1] = False
-        end_time = extract_end_time(sentence, is_title, start_from=best_idx + 1, start_datetime=ret)
-        if end_time is None:
-            return ret, timedelta(hours=1)
-        return ret, end_time - ret
+        else:
+            if m[2].startswith(':'):
+                score += 100
+            minutes = int(m[2][-2:])
+
+        mask = np.zeros(shape=len(sentence), dtype=bool)
+
+        am_pm = m[3]
+        if am_pm is None and i + 1 < len(sentence):
+            if sentence[i + 1] in ('a', 'am'):
+                am_pm = 'am'
+                mask[i + 1] = True
+            elif sentence[i + 1] in ('p', 'pm'):
+                am_pm = 'pm'
+                mask[i + 1] = True
+            elif fuzzy_match(sentence[i + 1], 'oclock'):
+                mask[i + 1] = True
+        if am_pm is not None:
+            score += 200
+        if hours <= 5 and am_pm is None:
+            hours += 12
+        if hours <= 12 and am_pm is not None and am_pm.startswith('p'):
+            hours += 12
+        mask[i] = True
+        specs.append(DataSpec(
+            (hours, minutes, i),
+            mask=mask,
+            score=score
+        ))
+    return specs
+
+
+def extract_duration(sentence: List[str]):
+    for i in range(len(sentence) - 1):
+        if sentence[i] != 'for':
+            continue
+        if not sentence[i + 1][0].isdecimal():
+            continue
+
+        try:
+            int(sentence[i + 1])
+        except ValueError:
+            word = sentence[i + 1]
+            num_digits = 1
+            for j in range(1, len(word) - 1):
+                if word[j].isdecimal():
+                    num_digits += 1
+                else:
+                    break
+            if word[num_digits:] in ('s', 'sec', 'secs', 'seconds', 'm', 'min', 'mins', 'minutes', 'h', 'hr', 'hour',
+                                     'hours'):
+                mask = np.zeros(shape=len(sentence), dtype=bool)
+                mask[i:i+2] = True
+                if word[num_digits:] in ('s', 'sec', 'secs', 'seconds'):
+                    return timedelta(seconds=int(word[:num_digits])), mask
+                elif word[num_digits:] in ('m', 'min', 'mins', 'minutes'):
+                    return timedelta(minutes=int(word[:num_digits])), mask
+                else:
+                    return timedelta(hours=int(word[:num_digits])), mask
+        else:
+            if i + 2 >= len(sentence):
+                return None
+            elif sentence[i + 2] in ('s', 'sec', 'secs', 'seconds', 'm', 'min', 'mins', 'minutes', 'h', 'hr', 'hour',
+                                     'hours'):
+                mask = np.zeros(shape=len(sentence), dtype=bool)
+                mask[i:i+3] = True
+                if sentence[i + 2] in ('s', 'sec', 'secs', 'seconds'):
+                    return timedelta(seconds=int(sentence[i + 1])), mask
+                elif sentence[i + 2] in ('m', 'min', 'mins', 'minutes'):
+                    return timedelta(minutes=int(sentence[i + 1])), mask
+                else:
+                    return timedelta(hours=int(sentence[i + 1])), mask
     return None, None
 
 
-def extract_info(input_string: str):
-    sentence = input_string.strip().lower().translate(str.maketrans('', '', ',._;')).split()
+def extract_info(user_input: str):
+    sentence = user_input.lower().translate(str.maketrans('', '', ',._;')).split()
     i = 0
     while i < len(sentence):
-        if '-' in sentence[i] and all(c.isdecimal() or c in 'apm-:' for c in sentence[i]):
+        if '-' in sentence[i] and sentence[i].index('-') not in (0, len(sentence[i]) - 1) \
+                and all(c.isdecimal() or c in 'apm-:' for c in sentence[i]):
             old = sentence[i]
             sentence[i] = sentence[i].split('-')[0]
             sentence.insert(i + 1, '-'.join(old.split('-')[1:]))
         i += 1
 
-    is_title = [True] * len(sentence)  # 0 title, 1 datetime component
+    event_date_spec_groups = [
+        func(sentence)
+        for func in (day_of_week_specs, relative_day_specs, absolute_date_specs)
+    ]
 
-    # date extraction
-    start_time, duration = extract_best_datetime_duration(sentence, is_title)
+    event_date_specs = [item for sublist in event_date_spec_groups for item in sublist]
+    if len(event_date_specs) == 0:
+        event_date = datetime.today().date()
+        mask_1 = np.zeros(len(sentence), dtype=bool)
+    else:
+        best_event_date_spec = max(event_date_specs, key=lambda s: s.score)
+        event_date = best_event_date_spec.data
+        mask_1 = best_event_date_spec.mask
 
-    if start_time is None:
-        event_date = extract_best_datelike(sentence, is_title)
-        start_time = event_date + timedelta(hours=12)
-        duration = timedelta(hours=1)
-    elif duration > timedelta(hours=12):
-        start_time += timedelta(hours=12)
-        duration -= timedelta(hours=12)
+    time_specs = part_of_day_specs(sentence) + absolute_time_specs(sentence)
+    time_scores = np.zeros(len(sentence), dtype=np.uint32)
+    specs_by_idx = {spec.data[2]: spec for spec in time_specs}
+    for spec in time_specs:
+        time_scores[spec.data[2]] += spec.score
+    start_hour, start_minute, end_hour, end_minute = None, None, None, None
+    start_spec, end_spec = None, None
 
-    title = ' '.join(titlecase(sentence[i]) for i in range(len(sentence)) if is_title[i])
+    if len(time_scores) <= 3:
+        best_i = 0
+    else:
+        best_i = max([i for i in range(len(time_scores) - 3)], key=lambda ii: time_scores[ii:ii+4].sum())
+
+    first = True
+    for j in range(4):
+        if best_i + j >= len(sentence):
+            break
+        if sentence[best_i + j] == 'for':
+            break
+        if time_scores[best_i + j] > 0:
+            if first:
+                start_hour, start_minute = specs_by_idx[best_i + j].data[:2]
+                first = False
+                start_spec = specs_by_idx[best_i + j]
+            else:
+
+                end_hour, end_minute = specs_by_idx[best_i + j].data[:2]
+                end_spec = specs_by_idx[best_i + j]
+
+    duration_mask = None
+    if end_hour is None:
+        duration, duration_mask = extract_duration(sentence)
+        if duration is None:
+            duration = timedelta(hours=1)
+    else:
+        duration = timedelta(hours=(end_hour - start_hour) % 24) + timedelta(minutes=(end_minute - start_minute))
+        if duration.total_seconds() >= 12 * 60 * 60:
+            if start_hour <= 12 and start_spec.score < 200:
+                start_hour += 12
+                duration -= timedelta(hours=12)
+
+    if start_hour is None:
+        start_hour, start_minute = 12, 0
+    elif event_date <= datetime.today().date() and start_hour < datetime.today().hour and start_spec.score < 200:
+        start_hour += 12
+
+    final_mask = mask_1
+    if start_spec is not None:
+        final_mask |= start_spec.mask
+    if end_spec is not None:
+        final_mask |= end_spec.mask
+    if duration_mask is not None:
+        final_mask |= duration_mask
+
     return {
-        'title': ' '.join(title.split()),
-        'startTime': start_time,
+        'title': ' '.join(sentence[i] for i in range(len(sentence)) if ~final_mask[i]),
+        'startTime': datetime(event_date.year, event_date.month, event_date.day, start_hour, start_minute),
         'duration': duration
     }
