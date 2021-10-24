@@ -16,7 +16,17 @@ class Calendar extends Component {
         //     const responseData = JSON.parse(xmlHttp.responseText);
         //     document.getElementsByClassName('message')[0].innerHTML = JSON.stringify(responseData);
         // }
-  }
+    }
+    
+    componentDidMount() {
+        const script = document.createElement("script");
+
+        script.src = "..scripts/cal-funcs.js";
+        script.async = true;
+
+        document.body.appendChild(script);
+    }  
+
   render() {
     return (
         <div>
