@@ -14,7 +14,7 @@ function init() {
     div_times.replaceChildren();
     for (let i = 0; i < 48; i++) {
         let hours = (Math.floor(i / 2) % 12);
-        if (i < 2) hours = 12;
+        if (i % 24 < 2) hours = 12;
         let minutes = i % 2 == 0 ? "00" : "30";
         let half = i < 24 ? "am" : "pm";
         let time = hours.toString() + ":" + minutes + half;
