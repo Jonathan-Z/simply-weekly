@@ -1,0 +1,247 @@
+@import url("https://cdn.jsdelivr.net/npm/@xz/fonts@1/serve/cascadia-code.min.css");
+
+* {
+    box-sizing: border-box;
+}
+
+:root {
+    --time-label-width: 5em;
+    --day-label-height: 1.5em;
+    --time-divisions: 9;
+    /* --calendar-height: 40em; */
+    --border-color: rgb(173, 173, 173);
+    background: #201F1D;
+    margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+    --border-thickness: 2px;
+    /* cell height = (calendar height - day label height - 2*border thickness) / time divisions */
+    /* --cell-height: calc((var(--calendar-height)) / var(--time-divisions)); */
+    --cell-height: 4em;
+    --calendar-height: calc(var(--time-divisions) * var(--cell-height));
+}
+
+#base {
+    /* display: flex;
+    flex-direction: column;
+    flex: 1 1;
+    height: 100%; */
+}
+
+#holder {
+    height: 60vh;
+    overflow: auto;
+}
+
+.header-text {
+  height: 75px;
+  width: auto;
+  padding: 0px;
+  margin: 0px;
+  text-align: center;
+  font-family: "Cascadia Code", sans-serif;
+  padding: 10px;
+}
+
+.simply {
+  color: white;
+}
+
+.weekly {
+  color: #6abed8;
+}
+
+.fade-in-image {
+    animation: fadeIn 4s;
+    -webkit-animation: fadeIn 4s;
+    -moz-animation: fadeIn 4s;
+    -o-animation: fadeIn 4s;
+    -ms-animation: fadeIn 4s;
+  }
+  @keyframes fadeIn {
+    0% {opacity:0;}
+    100% {opacity:1;}
+  }
+/* Calendar */
+#calendar-container {
+    font-family: "Calibri";
+    display: flex;
+    flex: 0 0;
+    align-items: stretch;
+    flex-direction: column;
+}
+
+#calendar {
+    margin: var(--day-label-height) var(--time-label-width) var(--day-label-height) var(--time-label-width);
+    min-height: var(--calendar-height);
+    height: var(--calendar-height);
+    overflow: visible;
+    display: flex;
+    flex: 0 0;
+    align-items: stretch;
+    flex-direction: row;
+    position: relative;
+}
+
+.label {
+    font-weight: bold;
+    padding: 0px .15em 0px .15em;
+    user-select: none;
+    pointer-events: none;
+}
+
+/* Times */
+#times {
+    display: flex;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: calc(0em - var(--time-label-width));
+    right: 0;
+    flex-direction: column;
+}
+
+.time {
+    position: relative;
+    flex: 0 0 var(--cell-height);
+}
+
+.time::after {
+    content:"";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    height: 0px;
+    border-top: 1px solid var(--border-color);
+}
+
+.time .label {
+    position: relative;
+    display: block;
+    width: var(--time-label-width);
+}
+
+/* Days */
+#days {
+    flex-direction: row;
+    display: flex;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: calc(0em - var(--day-label-height));
+    bottom: 0;
+    /* height: 100%; */
+}
+
+.day {
+    position: relative;
+    flex: 1 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    /* border-left: 2px solid var(--border-color); */
+}
+
+.day .label {
+    /* margin-bottom: var(--border-thickness); */
+    min-height: var(--day-label-height);
+    height: var(--day-label-height);
+    display: block;
+    text-align: center;
+    overflow: hidden;
+    color: white;
+}
+
+.day::after {
+    content: "";
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    width: 0px;
+    border-left: 1px solid var(--border-color);
+}
+
+/* Events */
+.events {
+    z-index: 2;
+    position: relative;
+    height: 100%;
+}
+
+.event {
+    position: absolute;
+    width: 100%;
+    /* border: 2px solid gray; */
+}
+
+.event span {
+    padding: 2px;
+    display: block;
+    font-family:Arial, Helvetica, sans-serif;
+    text-align: center;
+}
+
+span .label {
+    color: white;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    word-break: break-all;
+    height: 100%
+}
+
+
+.text-box {
+    /* margin-top: 450px; */
+    align-items: center;
+    width: 50%;
+    min-width: 500px;
+    /* margin-left: 40%; */
+    margin:auto;
+}
+
+input[type=text] {
+    height: 75px;
+    word-wrap: break-word;
+    word-break: break-all;
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+}
+
+input[type=text].label{
+    height: auto;
+    word-wrap: break-word;
+    word-break: break-all;
+    width: 100%;
+    padding: 0px 0px;
+    margin: 0px 0;
+    box-sizing: border-box;
+    user-select: all;
+    pointer-events: inherit;
+    color: black;
+}
+
+button {
+    width: 100%;
+    padding: 12px 20px;
+}
+
+button:focus {
+    background: #6abed8;
+}
+
+#generateTest {
+    margin-top: 100px;
+    align-items: center;
+    margin-left: 25%;
+    width: 50%;
+    min-width: 500px;    text-align: center;
+    align-items: center;
+}
