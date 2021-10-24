@@ -2,14 +2,39 @@ let r = document.querySelector(':root');
 let times = document.querySelector("#times .time");
 let timesStyles = getComputedStyle(times);
 let styles = getComputedStyle(document.body);
+const calendar = document.querySelector("#holder");
 let eventSlots = document.querySelectorAll("#days .day .events");
 let div_times = document.querySelector("#times");
 let div_days = document.querySelector("#days");
+let submit = document.querySelector(".submit-button")
+let info = document.querySelector(".text-box input");
 
-document.addEventListener("click", handleClick);
+calendar.addEventListener("click", handleClick);
+submit.addEventListener("click", () => {
+    console.log(info.value);
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.open( "GET", "http://127.0.0.1:5000/api/parse?name=simplyWeekly&text=" + info.value, false);
+    xmlHttp.send()
+    console.log(xmlHttp.responseText);
+    let data = JSON.parse(xmlHttp.responseText);
+    let toAdd = data.events[data.events.length - 1];
+    let date = new Date(toAdd.startTime);
+    let day = date.getDay();
+    let startTime = (date.getMinutes() + (date.getSeconds() / 60) + (date.getHours() * 60))/30;
+    let duration = toAdd.duration / 30;
+    let title = toAdd.title;
+    // https://css-tricks.com/snippets/javascript/random-hex-color/
+    let randomColor = "#" + Math.floor(Math.random() * 16777215).toString(16);
+    console.log(date.getMinutes());
+    console.log(date.getHours());
+    console.log(date.getSeconds());
+    console.log(startTime);
+    newEvent(day, startTime, duration, title, randomColor);
+})
 
 function handleClick(e) {
-    if (e.target.className == "event") {
+    console.log(e.target);
+    if (e != null && (e.target.nodeName == "DIV") && e.target.className == "event") {
         console.log(e.target);
         let event = e.target.querySelector(".label");
         console.log(event.innerText);

@@ -149,7 +149,7 @@
 .day .label {
     /* margin-bottom: var(--border-thickness); */
     min-height: var(--day-label-height);
-    height: var(--day-label-height);
+    /* height: var(--day-label-height); */
     display: block;
     text-align: center;
     overflow: hidden;
@@ -187,11 +187,11 @@
     text-align: center;
 }
 
-span .label {
+span.label {
     color: white;
     overflow-wrap: break-word;
     word-wrap: break-word;
-    word-break: break-all;
+    word-break: normal;
     height: 100%
 }
 
@@ -208,7 +208,7 @@ span .label {
 input[type=text] {
     height: 75px;
     word-wrap: break-word;
-    word-break: break-all;
+    word-break: normal;
     width: 100%;
     padding: 12px 20px;
     margin: 8px 0;
@@ -216,9 +216,9 @@ input[type=text] {
 }
 
 input[type=text].label{
-    height: auto;
+    height: 50%;
     word-wrap: break-word;
-    word-break: break-all;
+    word-break: normal;
     width: 100%;
     padding: 0px 0px;
     margin: 0px 0;
@@ -226,6 +226,7 @@ input[type=text].label{
     user-select: all;
     pointer-events: inherit;
     color: black;
+    background-color: transparent;
 }
 
 button {
