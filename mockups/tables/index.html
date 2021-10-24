@@ -12,115 +12,116 @@
 </head>
 
 <body>
-    <!-- Populate these at runtime -->
-      <h1 class="header-text fade-in-image">
-        <span class="simply">Simply</span>
-        <span class="weekly">Weekly</span>
-      </h1>
-    </div>
-        <div id="calendar-container">
-            <!-- border right and bottom -->
-            <div id="calendar">
-                <!-- Use ::after to have lines on top of row -->
-                <!-- Times are rows -->
-                <div id="times">
-                    <!-- Number of these should change depending on zoom/time resolution -->
-                    <!-- I've just put a few times manually until we make the script do it -->
-                    <span class="time">
-                        <span class="label">7:30am</span>
-                    </span>
-                    <span class="time">
-                        <span class="label">8:00am</span>
-                    </span>
-                    <span class="time">
-                        <span class="label">8:30am</span>
-                    </span>
-                    <span class="time">
-                        <span class="label">9:00am</span>
-                    </span>
-                    <span class="time">
-                        <span class="label">9:30am</span>
-                    </span>
-                    <span class="time">
-                        <span class="label">10:00am</span>
-                    </span>
-                    <span class="time">
-                        <span class="label">10:30am</span>
-                    </span>
-                    <span class="time">
-                        <span class="label">11:00am</span>
-                    </span>
-                    <span class="time">
-                        <span class="label">11:30am</span>
-                    </span>
+    <div id="base">
+        <!-- Populate these at runtime -->
+        <h1 class="header-text fade-in-image">
+            <span class="simply">Simply</span>
+            <span class="weekly">Weekly</span>
+        </h1>
+        <div id="holder">
+            <div id="calendar-container">
+                <!-- border right and bottom -->
+                <div id="calendar">
+                    <!-- Use ::after to have lines on top of row -->
+                    <!-- Times are rows -->
+                    <div id="times">
+                        <!-- Number of these should change depending on zoom/time resolution -->
+                        <!-- I've just put a few times manually until we make the script do it -->
+                        <span class="time">
+                            <span class="label">7:30am</span>
+                        </span>
+                        <span class="time">
+                            <span class="label">8:00am</span>
+                        </span>
+                        <span class="time">
+                            <span class="label">8:30am</span>
+                        </span>
+                        <span class="time">
+                            <span class="label">9:00am</span>
+                        </span>
+                        <span class="time">
+                            <span class="label">9:30am</span>
+                        </span>
+                        <span class="time">
+                            <span class="label">10:00am</span>
+                        </span>
+                        <span class="time">
+                            <span class="label">10:30am</span>
+                        </span>
+                        <span class="time">
+                            <span class="label">11:00am</span>
+                        </span>
+                        <span class="time">
+                            <span class="label">11:30am</span>
+                        </span>
+                    </div>
+                    <!-- Use ::after to have lines on left of col  -->
+                    <!-- Days are columns -->
+                    <div id="days">
+                        <!-- Should only have 7 days -->
+                        <div class="day">
+                            <span class="label">Monday 9/5</span>
+                            <div class="events">
+                                <div class="event" style="top: 0em; height: 4.111em; background-color: #E0BBE4;">
+                                    <!-- We can construct the inline position styles in JS -->
+                                    <span>test event</span>
+                                </div>
+                                <div class="event" style="top: 27.083ch; height: 10.833ch; background-color: #957DAD;">
+                                    <!-- We can construct the inline position styles in JS -->
+                                    <span>cool things</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="day">
+                            <span class="label">Tuesday 9/6</span>
+                            <div class="events">
+                                <div class="event" style="top: 0ch; height: 10.833ch; background-color: #D291BC;">
+                                    <!-- We can construct the inline position styles in JS -->
+                                    <span>stuff</span>
+                                </div>
+                                <div class="event" style="top: 86.666ch; height: 10.833ch; background-color: #FEC8D8;">
+                                    <!-- We can construct the inline position styles in JS -->
+                                    <span>stuff2</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="day">
+                            <span class="label">Wednesday 9/7</span>
+                            <div class="events">
+                            </div>
+                        </div>
+                        <div class="day">
+                            <span class="label">Thursday 9/8</span>
+                            <div class="events">
+                            </div>
+                        </div>
+                        <div class="day">
+                            <span class="label">Friday 9/9</span>
+                            <div class="events">
+                            </div>
+                        </div>
+                        <div class="day">
+                            <span class="label">Saturday 9/10</span>
+                            <div class="events">
+                            </div>
+                        </div>
+                        <div class="day">
+                            <span class="label">Sunday 9/11</span>
+                            <div class="events">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- position to stack directly on top of bg -->
                 </div>
-                <!-- Use ::after to have lines on left of col  -->
-                <!-- Days are columns -->
-                <div id="days">
-                    <!-- Should only have 7 days -->
-                    <div class="day">
-                        <span class="label">Monday 9/5</span>
-                        <div class="events">
-                            <div class="event" style="top: 0em; height: 4.111em; background-color: #E0BBE4;">
-                                <!-- We can construct the inline position styles in JS -->
-                                <span>test event</span>
-                            </div>
-                            <div class="event" style="top: 27.083ch; height: 10.833ch; background-color: #957DAD;">
-                                <!-- We can construct the inline position styles in JS -->
-                                <span>cool things</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="day">
-                        <span class="label">Tuesday 9/6</span>
-                        <div class="events">
-                            <div class="event" style="top: 0ch; height: 10.833ch; background-color: #D291BC;">
-                                <!-- We can construct the inline position styles in JS -->
-                                <span>stuff</span>
-                            </div>
-                            <div class="event" style="top: 86.666ch; height: 10.833ch; background-color: #FEC8D8;">
-                                <!-- We can construct the inline position styles in JS -->
-                                <span>stuff2</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="day">
-                        <span class="label">Wednesday 9/7</span>
-                        <div class="events">
-                        </div>
-                    </div>
-                    <div class="day">
-                        <span class="label">Thursday 9/8</span>
-                        <div class="events">
-                        </div>
-                    </div>
-                    <div class="day">
-                        <span class="label">Friday 9/9</span>
-                        <div class="events">
-                        </div>
-                    </div>
-                    <div class="day">
-                        <span class="label">Saturday 9/10</span>
-                        <div class="events">
-                        </div>
-                    </div>
-                    <div class="day">
-                        <span class="label">Sunday 9/11</span>
-                        <div class="events">
-                        </div>
-                    </div>
-                </div>
-                <!-- position to stack directly on top of bg -->
-            </div>
-            
-            <div class="text-box">
-                <input type="text" placeholder="Type what you want added to calendar"></input>
-                <button class="submit-button" onClick={this.handleClick} type="submit">Submit</button>
+                
+                
             </div>
         </div>
+        <div class="text-box">
+            <input type="text" placeholder="Type what you want added to calendar"></input>
+            <button class="submit-button" onClick={this.handleClick} type="submit">Submit</button>
+        </div>
     </div>
-        
-    <button id="generateTest">Add Random</button>
     
     <!--Generally, it is best practice to place the script at the end of the body so the page is fully loaded and rendered before it loads and parses the JS-->
     <script src="./index.js"></script>

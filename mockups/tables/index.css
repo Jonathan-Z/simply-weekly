@@ -24,6 +24,18 @@
     --calendar-height: calc(var(--time-divisions) * var(--cell-height));
 }
 
+#base {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1;
+    height: 100%;
+}
+
+#holder {
+    /* height: 60vh; */
+    /* overflow: auto; */
+}
+
 .header-text {
   height: 75px;
   width: auto;
