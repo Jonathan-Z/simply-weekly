@@ -1,13 +1,21 @@
 import React, { Component } from "react";
 import "./Calendar.css";
+
 class Calendar extends Component {
   state = {};
     handleClick(){
         console.log("hi");
-        var xhr = new XMLHttpRequest()
-        xhr.open("POST", "http://127.0.0.1:5000/api/update/add",true)
-        xhr.setRequestHeader('Content-Type', 'application/json');
-        xhr.send(JSON.stringify({"name":"JYZ","data":{"title":"find something",startTime:"2021-10-23T12:23:15","duration":500,"notes":"asfjhkjh"}}))
+        var xmlHttp = new XMLHttpRequest();
+        xmlHttp.open( "GET", "http://127.0.0.1:5000/api/parse?name={CalName}&text={calText}", false);
+        xmlHttp.send();
+        const responseData = xmlHttp.response;
+        {responseData.map(user => (
+        <li key={user.startTime}>{user.startTime}</li>
+      ))}
+        // xmlHttp.onload = function(){
+        //     const responseData = JSON.parse(xmlHttp.responseText);
+        //     document.getElementsByClassName('message')[0].innerHTML = JSON.stringify(responseData);
+        // }
   }
   render() {
     return (
@@ -78,6 +86,8 @@ class Calendar extends Component {
                 <div className="day day1">
                     <span className="label">Sunday</span>
                 </div>
+                      <div className="background-print"></div>
+
             </div>
         </div>
       </div>
