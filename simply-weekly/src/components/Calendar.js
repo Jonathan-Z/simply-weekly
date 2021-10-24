@@ -1,8 +1,9 @@
 import React, { Component } from "react";
 import "./Calendar.css";
+import { CalFunc } from "../CalFuncs.js";
 
 class Calendar extends Component {
-  state = {};
+  state = { funcs: null };
     handleClick(){
         console.log("hi");
         var xmlHttp = new XMLHttpRequest();
@@ -19,12 +20,8 @@ class Calendar extends Component {
     }
     
     componentDidMount() {
-        const script = document.createElement("script");
-
-        script.src = "..scripts/cal-funcs.js";
-        script.async = true;
-
-        document.body.appendChild(script);
+        // window['init']();
+        
     }  
 
   render() {
