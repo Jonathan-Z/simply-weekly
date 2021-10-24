@@ -5,13 +5,20 @@ class Calendar extends Component {
   state = {};
     handleClick(){
         console.log("hi");
+
         var xmlHttp = new XMLHttpRequest();
-        xmlHttp.open( "GET", "http://127.0.0.1:5000/api/parse?name={CalName}&text={calText}", false);
+
+        xmlHttp.open( "GET", "http://127.0.0.1:5000/api/parse?name=SimplyWeekly&text="+encodeURI(document.getElementById("ibox").value), false);
         xmlHttp.send();
+
+        document.getElementById("ibox").value = "";
+
+
         const responseData = xmlHttp.response;
-        {responseData.map(user => (
-        <li key={user.startTime}>{user.startTime}</li>
-      ))}
+        console.log(responseData)
+        //{responseData.map(user => (
+        //<li key={user.startTime}>{user.startTime}</li>
+      //))}
         // xmlHttp.onload = function(){
         //     const responseData = JSON.parse(xmlHttp.responseText);
         //     document.getElementsByClassName('message')[0].innerHTML = JSON.stringify(responseData);
@@ -22,7 +29,7 @@ class Calendar extends Component {
       <div className="calendar-container">
         <div id="calendar">
         <div class="text-box">
-                <input type="text" placeholder="Type what you want added to calendar"></input>
+                <input type="text" placeholder="Type what you want added to calendar" id="ibox"></input>
                 <button className="submit-button" onClick={this.handleClick} type="submit">Submit</button>
   </div>
             <div id="times">
