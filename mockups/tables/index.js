@@ -130,6 +130,7 @@ function newEvent(day, start, duration, label, color) {
     n_label.className = "label";
     
     n_event.appendChild(n_label);
+    console.log(n_event);
     eventSlots[day].appendChild(n_event);
 }
 
@@ -164,4 +165,4 @@ function updateEvent(n_event, day, start, duration, label, color) {
 
 
 init();
-randomEvent();
+// randomEvent();
