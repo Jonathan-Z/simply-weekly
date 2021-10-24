@@ -57,3 +57,13 @@ function updateEvent(n_event, day, start, duration, label, color) {
         eventSlots[day].appendChild(n_event);
     }
 }
+
+function handleClick(){
+    console.log("hi");
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.open( "GET", "http://127.0.0.1:5000/api/parse?name={CalName}&text={calText}", false);
+    xmlHttp.send();
+    const responseData = xmlHttp.response;
+    {responseData.map(user => (
+    <li key={user.startTime}>{user.startTime}</li>
+  ))}
