@@ -31,10 +31,29 @@ function newEvent(day, start, duration, label, color) {
 }
 
 function updateEvent(n_event, day, start, duration, label, color) {
+    const oldStyles = getComputedStyle(n_event);
+
     const p_start = "calc(" + start.toString() + " * var(--cell-height))";
     const p_duration = "calc(" + duration.toString() + " * var(--cell-height))";
     const n_label = n_event.querySelector("span");
+
+    if (start == null) {
+        p_start = oldStyles.getPropertyValue("top");
+    }
+    if (duration == null) {
+        p_duration = oldStyles.getPropertyValue("height");
+    }
+    if (color == null) {
+        color = oldStyles.getPropertyValue("background-color");
+    }
+    if (label == null) {
+        label = n_label.innerText;
+    }
+
     n_event.setAttribute("style", "top: " + p_start + "; height: " + p_duration + "; background-color: " + color);
     n_label.innerText = label;
-    eventSlots[day].appendChild(n_event);
+
+    if (day != null) {
+        eventSlots[day].appendChild(n_event);
+    }
 }
