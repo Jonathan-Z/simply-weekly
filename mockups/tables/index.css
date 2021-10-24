@@ -15,6 +15,11 @@
     --calendar-height: calc(var(--time-divisions) * var(--cell-height));
 }
 
+.holder {
+    height: 80vh;
+    overflow: auto;
+}
+
 /* Calendar */
 #calendar-container {
     font-family: "Calibri";
@@ -22,6 +27,7 @@
     flex: 0 0;
     align-items: stretch;
     flex-direction: column;
+    overflow: auto;
 }
 
 #calendar {
