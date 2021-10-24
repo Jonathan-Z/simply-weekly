@@ -1,136 +1,343 @@
+@import url(https://cdn.jsdelivr.net/npm/@xz/fonts@1/serve/cascadia-code.min.css);
+
 * {
-    box-sizing: border-box;
+  box-sizing: border-box;
+  /* font-family: 'Cascadia Code', sans-serif; */
 }
 
+.App {
+    /* text-align: center; */
+    background: #201f1d;
+  }
+
+  .App-logo {
+    height: 40vmin;
+    pointer-events: none;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .App-logo {
+      animation: App-logo-spin infinite 20s linear;
+    }
+  }
+
+  .App-header {
+    min-height: 100vh;
+    font-size: calc(10px + 2vmin);
+
+    /* display: flex; */
+    /* flex-direction: column; */
+    /* align-items: center; */
+    /* justify-content: center; */
+    /* font-size: calc(10px + 2vmin); */
+    /* color: white; */
+  }
+
+  .App-link {
+    color: #61dafb;
+  }
+
+  .pdf-btn {
+    width: 150px;
+    float: right;
+  }
+
+  @keyframes App-logo-spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  /*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly9zcmMvQXBwLmNzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTtFQUNFLHdCQUF3QjtFQUN4QixtQkFBbUIsQ0FBQzs7QUFFdEI7RUFDRSxjQUFjO0VBQ2Qsb0JBQW9CO0FBQ3RCOztBQUVBO0VBQ0U7SUFDRSw0Q0FBNEM7RUFDOUM7QUFDRjs7QUFFQTtFQUNFLGlCQUFpQjtFQUNqQiw2QkFBNkI7O0VBRTdCLG1CQUFtQjtFQUNuQiw0QkFBNEI7RUFDNUIseUJBQXlCO0VBQ3pCLDZCQUE2QjtFQUM3QixtQ0FBbUM7RUFDbkMsa0JBQWtCO0FBQ3BCOztBQUVBO0VBQ0UsY0FBYztBQUNoQjs7QUFFQTtFQUNFLFlBQVk7RUFDWixZQUFZO0FBQ2Q7O0FBRUE7RUFDRTtJQUNFLHVCQUF1QjtFQUN6QjtFQUNBO0lBQ0UseUJBQXlCO0VBQzNCO0FBQ0YiLCJzb3VyY2VzQ29udGVudCI6WyIuQXBwIHtcclxuICAvKiB0ZXh0LWFsaWduOiBjZW50ZXI7ICovXHJcbiAgYmFja2dyb3VuZDogIzIwMUYxRDt9XHJcblxyXG4uQXBwLWxvZ28ge1xyXG4gIGhlaWdodDogNDB2bWluO1xyXG4gIHBvaW50ZXItZXZlbnRzOiBub25lO1xyXG59XHJcblxyXG5AbWVkaWEgKHByZWZlcnMtcmVkdWNlZC1tb3Rpb246IG5vLXByZWZlcmVuY2UpIHtcclxuICAuQXBwLWxvZ28ge1xyXG4gICAgYW5pbWF0aW9uOiBBcHAtbG9nby1zcGluIGluZmluaXRlIDIwcyBsaW5lYXI7XHJcbiAgfVxyXG59XHJcblxyXG4uQXBwLWhlYWRlciB7XHJcbiAgbWluLWhlaWdodDogMTAwdmg7XHJcbiAgZm9udC1zaXplOiBjYWxjKDEwcHggKyAydm1pbik7XHJcblxyXG4gIC8qIGRpc3BsYXk6IGZsZXg7ICovXHJcbiAgLyogZmxleC1kaXJlY3Rpb246IGNvbHVtbjsgKi9cclxuICAvKiBhbGlnbi1pdGVtczogY2VudGVyOyAqL1xyXG4gIC8qIGp1c3RpZnktY29udGVudDogY2VudGVyOyAqL1xyXG4gIC8qIGZvbnQtc2l6ZTogY2FsYygxMHB4ICsgMnZtaW4pOyAqL1xyXG4gIC8qIGNvbG9yOiB3aGl0ZTsgKi9cclxufVxyXG5cclxuLkFwcC1saW5rIHtcclxuICBjb2xvcjogIzYxZGFmYjtcclxufVxyXG5cclxuLnBkZi1idG4ge1xyXG4gIHdpZHRoOiAxNTBweDtcclxuICBmbG9hdDogcmlnaHQ7XHJcbn1cclxuXHJcbkBrZXlmcmFtZXMgQXBwLWxvZ28tc3BpbiB7XHJcbiAgZnJvbSB7XHJcbiAgICB0cmFuc2Zvcm06IHJvdGF0ZSgwZGVnKTtcclxuICB9XHJcbiAgdG8ge1xyXG4gICAgdHJhbnNmb3JtOiByb3RhdGUoMzYwZGVnKTtcclxuICB9XHJcbn1cclxuIl0sInNvdXJjZVJvb3QiOiIifQ== */
+</style>
+<style>
+  @import url(https://cdn.jsdelivr.net/npm/@xz/fonts@1/serve/cascadia-code.min.css);
+</style>
+<style>
+  .header-text {
+    height: 75px;
+    padding: 0px;
+    margin: 0px;
+    text-align: center;
+    font-family: "Cascadia Code", sans-serif;
+    padding: 10px;
+  }
+
+  .simply {
+    color: white;
+  }
+
+  .weekly {
+    color: #6abed8;
+  }
+
+  .fade-in-image {
+    animation: fadeIn 4s;
+    -webkit-animation: fadeIn 4s;
+    -moz-animation: fadeIn 4s;
+    -o-animation: fadeIn 4s;
+    -ms-animation: fadeIn 4s;
+  }
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+
+  #preloader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: black;
+    z-index: 99;
+  }
+  #status {
+    width: 100%;
+    height: 100%;
+
+    background-image: url(/static/media/techgif.fa52985e.gif);
+    background-repeat: no-repeat;
+    background-position: center;
+    margin: -100 0 0 -100px;
+  }
 :root {
-    --time-label-width: 5em;
-    --day-label-height: 1.5em;
-    --time-divisions: 9;
-    /* --calendar-height: 40em; */
-    --border-color: rgb(128, 128, 128);
-    --border-thickness: 2px;
-    /* cell height = (calendar height - day label height - 2*border thickness) / time divisions */
-    /* --cell-height: calc((var(--calendar-height)) / var(--time-divisions)); */
-    --cell-height: 4em;
-    --calendar-height: calc(var(--time-divisions) * var(--cell-height));
+  --time-label-width: 5em;
+  --day-label-height: 2.5em;
+  --time-divisions: 9;
+  /* --calendar-height: 40em; */
+  --border-color: hsla(0, 0%, 50.2%, 0.2);
+  --border-thickness: 2px;
+  /* cell height = (calendar height - day label height - 2*border thickness) / time divisions */
+  /* --cell-height: calc((var(--calendar-height)) / var(--time-divisions)); */
+  --cell-height: 4em;
+  --calendar-height: calc(var(--time-divisions) * var(--cell-height));
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 
 /* Calendar */
-#calendar-container {
-    font-family: "Calibri";
-    display: flex;
-    flex: 0 0;
-    align-items: stretch;
-    flex-direction: column;
+.calendar-container {
+  margin: auto;
+  width: 100%;
+  display: flex;
+  flex: 0 0;
+  align-items: stretch;
+  flex-direction: column;
+  /* overflow: auto; */
 }
 
-#calendar {
-    margin: var(--day-label-height) var(--time-label-width) var(--day-label-height) var(--time-label-width);
-    min-height: var(--calendar-height);
-    height: var(--calendar-height);
-    overflow: visible;
-    display: flex;
-    flex: 0 0;
-    align-items: stretch;
-    flex-direction: row;
-    position: relative;
+.calendar {
+  margin: var(--day-label-height) 0 var(--day-label-height)
+    var(--time-label-width);
+  min-height: var(--calendar-height);
+  height: var(--calendar-height);
+  /* overflow: auto; */
+  display: flex;
+  flex: 0 0;
+  align-items: stretch;
+  flex-direction: row;
+  position: relative;
+  /* background: #201F1D; */
 }
 
 .label {
-    font-weight: bold;
-    padding: 0px .15em 0px .15em;
+  font-weight: bold;
+  padding: 0px 0.15em 0px 0.15em;
+  animation: fadeIn 4s;
+  -webkit-animation: fadeIn 4s;
+  -moz-animation: fadeIn 4s;
+  -o-animation: fadeIn 4s;
+  -ms-animation: fadeIn 4s;
 }
 
 /* Times */
-#times {
-    display: flex;
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: calc(0em - var(--time-label-width));
-    right: 0;
-    flex-direction: column;
+.times {
+  display: flex;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: calc(0em - var(--time-label-width));
+  right: 0;
+  flex-direction: column;
 }
 
 .time {
-    position: relative;
-    flex: 0 0 var(--cell-height);
+  position: relative;
+  flex: 0 0 var(--cell-height);
 }
 
 .time::after {
-    content:"";
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 0;
-    height: 0px;
-    border-top: 1px solid var(--border-color);
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 0px;
+  border-top: 1px solid var(--border-color);
 }
 
 .time .label {
-    position: relative;
-    display: block;
-    width: var(--time-label-width);
+  position: relative;
+  display: block;
+  width: var(--time-label-width);
 }
 
 /* Days */
-#days {
-    flex-direction: row;
-    display: flex;
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: calc(0em - var(--day-label-height));
-    bottom: 0;
-    /* height: 100%; */
+.days {
+  flex-direction: row;
+  display: flex;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(0em - var(--day-label-height));
+  bottom: 0;
 }
 
 .day {
-    position: relative;
-    flex: 1 1;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    /* border-left: 2px solid var(--border-color); */
+  position: relative;
+  flex: 1 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
 .day .label {
-    /* margin-bottom: var(--border-thickness); */
-    min-height: var(--day-label-height);
-    height: var(--day-label-height);
-    display: block;
-    text-align: center;
-    overflow: hidden;
+  min-height: var(--day-label-height);
+  height: var(--day-label-height);
+  display: block;
+  text-align: center;
+  overflow: hidden;
 }
 
 .day::after {
-    content: "";
-    position: absolute;
-    top: 0px;
-    bottom: 0px;
-    left: 0px;
-    right: 0px;
-    width: 0px;
-    border-left: 1px solid var(--border-color);
+  content: "";
+  position: absolute;
+  top: 0px;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+  width: 0px;
+  border-left: 1px solid var(--border-color);
+}
+
+.time1 {
+  color: white;
+}
+
+.time2 {
+  color: #6abed8;
+}
+
+.day2 {
+  color: #6abed8;
+}
+.day1 {
+  color: white;
 }
 
 /* Events */
 .events {
-    z-index: 2;
-    position: relative;
-    height: 100%;
+  z-index: 2;
+  position: relative;
+  height: 100%;
 }
 
 .event {
-    position: absolute;
-    width: 100%;
-    /* border: 2px solid gray; */
+  position: absolute;
+  width: 100%;
+  font-weight: bold;
+  /* font-size: 80%; */
 }
 
 .event span {
-    padding: 2px;
-    display: block;
-    font-family:Arial, Helvetica, sans-serif;
-    text-align: center;
+  padding: 2px;
+  display: block;
+  text-align: center;
 }
 
+.calendar1 {
+  background-color: #9ec8dd;
+  border-color: #81cdf2;
+}
+
+.calendar2 {
+  background-color: #9b9eb0;
+  border-color: #bcc3e5;
+}
+
+.text-box {
+  /* margin-top: 450px; */
+  align-items: center;
+  width: 50%;
+  min-width: 500px;
+  /* margin-left: 40%; */
+  margin: auto;
+}
+
+input[type="text"] {
+  height: 75px;
+  word-wrap: break-word;
+  word-break: break-all;
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  box-sizing: border-box;
+}
+
+button {
+  width: 100%;
+  padding: 12px 20px;
+}
+
+button:focus {
+  background: #6abed8;
+}
+
+.eight-am {
+  /* margin-top: 30%; */
+  margin-top: 40px;
+}
+
+.eight-thirty-am {
+  /* margin-top: 60%; */
+  margin-top: 80px;
+}
+
+.nine-am {
+  margin-top: 120px;
+}
+
+.nine-thirty-am {
+  margin-top: 160px;
+}
+
+.ten-am {
+  margin-top: 200px;
+}
+
+.ten-thirty-am {
+  margin-top: 240px;
+}
+
+.eleven-am {
+  margin-top: 280px;
+}
+
+.eleven-thirty-am {
+  margin-top: 320px;
+}
